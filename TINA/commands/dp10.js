@@ -1,11 +1,10 @@
 module.exports.config = {
   name: "dp10",
   version: "7.3.1",
-  Permssion: 0,
+  hasPermssion: 0,
   credits: "islamick chat",
-  prefix:true,
   description: "Get Pair From Mention",
-  category: "png",
+  commandCategory: "png",
   usages: "[@mention]",
   cooldowns: 5, 
   dependencies: {
