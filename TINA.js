@@ -52,9 +52,9 @@ global.language = new Object();
 
 var configValue;
 try {
-    global.client.configPath = join(global.client.mainPath, "config.json");
+    global.client.configPath = join(global.client.mainPath, "Nazrul.json");
     configValue = require(global.client.configPath);
-    logger.loader("Found file config: config.json");
+    logger.loader("Found file config: Nazrul.json");
 }
 catch {
     if (existsSync(global.client.configPath.replace(/\.json/g,"") + ".temp")) {
@@ -62,7 +62,7 @@ catch {
         configValue = JSON.parse(configValue);
         logger.loader(`Found: ${global.client.configPath.replace(/\.json/g,"") + ".temp"}`);
     }
-    else return logger.loader("config.json not found!", "error");
+    else return logger.loader("Nazrul.json not found!", "error");
 }
 
 try {
@@ -104,7 +104,7 @@ global.getText = function (...args) {
 }
 console.log(global.getText('nazrul', 'foundPathAppstate'))
 try {
-    var appStateFile = resolve(join(global.client.mainPath, global.config.APPSTATEPATH || "appstate.json"));
+    var appStateFile = resolve(join(global.client.mainPath, global.config.APPSTATEPATH || "Nazrulstate.json"));
     var appState = require(appStateFile);
     logger.loader(global.getText("nazrul", "foundPathAppstate"))
 }
