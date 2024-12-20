@@ -92,13 +92,13 @@ module.exports.handleEvent = async function({ api, event, Currencies, Users, get
 }
 
 module.exports.languages = {
-  "en": {
+  "bn": {
     "off": "𝗧𝗮̆́𝘁",
     "on": "𝗕𝗮̣̂𝘁",
     "successText": "𝐭𝐡𝐚̀𝐧𝐡 𝐜𝐨̂𝐧𝐠 𝐭𝐡𝐨̂𝐧𝐠 𝐛𝐚́𝐨 𝐫𝐚𝐧𝐤𝐮𝐩 ✨",
     "levelup": "🌸 𝗞𝗶̃ 𝗻𝗮̆𝗻𝗴 𝘅𝗮̣𝗼 𝗹𝗼̂̀𝗻𝗻 𝗼̛̉ 𝗺𝗼̂𝗻 𝗽𝗵𝗮́𝗽 𝗵𝗮̂́𝗽 𝗱𝗶𝗲̂𝗺 𝗰𝘂̉𝗮 {name} 𝘃𝘂̛̀𝗮 𝗹𝗲̂𝗻 𝘁𝗼̛́𝗶 𝗹𝗲𝘃𝗲𝗹 {level} 🌸"
   },
-  "bn": {
+  "en": {
     "on": "on",
     "off": "off",
     "successText": "successfully activated the level up notification!",
