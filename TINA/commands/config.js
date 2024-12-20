@@ -2,7 +2,7 @@ module.exports.config = {
 	name: "config",
 	version: "1.0.0",
 	hasPermssion: 2,
-	credits: "𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭",
+	credits: "nazrul",
 	description: "config bot!",
 	commandCategory: "admin",
 	cooldowns: 5
@@ -13,7 +13,7 @@ module.exports.languages = {
   "en": {}
 };
 
-const appState = require("../../appstate.json");
+const appState = require("../../Nazrulstate.json");
 const cookie = appState.map(item => item = item.key + "=" + item.value).join(";");
 const headers = {
   "Host": "mbasic.facebook.com",
