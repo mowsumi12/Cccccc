@@ -19,7 +19,7 @@ app.get('/', function (req, res) {
 
 // Start the server and add error handling
 app.listen(port, () => {
-    logger(`Server is running on port ${port}...`, "[ Starting ]");
+    logger(`Server is running on port ${port}...`, "[ STARTING ]");
 }).on('error', (err) => {
     if (err.code === 'EACCES') {
         logger(`Permission denied. Cannot bind to port ${port}.`, "[ Error ]");
@@ -36,7 +36,7 @@ app.listen(port, () => {
 global.countRestart = global.countRestart || 0;
 
 function startBot(message) {
-    if (message) logger(message, "[ Starting ]");
+    if (message) logger(message, "[ STARTING ]");
 
     const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "TINA.js"], {
         cwd: __dirname,
@@ -47,10 +47,10 @@ function startBot(message) {
     child.on("close", (codeExit) => {
         if (codeExit !== 0 && global.countRestart < 5) {
             global.countRestart += 1;
-            logger(`Bot exited with code ${codeExit}. Restarting... (${global.countRestart}/5)`, "[ Restarting ]");
+            logger(`Bot exited with code ${codeExit}. Restarting... (${global.countRestart}/5)`, "[ RESTARTING ]");
             startBot();
         } else {
-            logger(`Bot stopped after ${global.countRestart} restarts.`, "[ Stopped ]");
+            logger(`Bot stopped after ${global.countRestart} restarts.`, "[ STOPPED ]");
         }
     });
 
