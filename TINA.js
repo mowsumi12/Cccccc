@@ -67,7 +67,7 @@ catch {
 
 try {
     for (const key in configValue) global.config[key] = configValue[key];
-    logger.loader("Config Loaded!");
+    logger.loader("Nazrul.json Loaded!");
 }
 catch { return logger.loader("Can't load file config!", "error") }
 
