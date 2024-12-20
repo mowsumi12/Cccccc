@@ -6,11 +6,10 @@
 module.exports.config = {
     name: "dp9",
     version: "2.0.0",
-    permssion: 2,
+    hasPermssion: 0,
     credits: "Mohammad Nayan",
     description: "",
-    prefix: true,
-    category: "Love",
+    commandCategory: "Love",
     usages: "[tag]",
     cooldowns: 5,
     dependencies: {
