@@ -2,52 +2,31 @@ module.exports.config = {
   name: "imgur",
   version: "1.0.0",
   hasPermssion: 0,
-  credits: "Nayan",
-  description: "",
-  commandCategory: "user",
-  usages: "Link",
-  cooldowns: 5,
+  credits: "NAZRUL",// cmd convert to MR.NAZRUL **//
+  description: "Create Image&video link",
+  commandCategory: "Image",
+  cooldowns: 1,
   dependencies: {
-    "axios": "",
-    "nayan-imgur-upload-api": ""
+    "request":"",
+    "fs-extra":"",
+    "axios":""
   }
 };
+
 
 module.exports.run = async ({ api, event, args }) => {
-  const axios = global.nodemodule['axios'];
-  const { imgur } = require("nayan-imgur-upload-apis");
-
-
-  let linkanh = event.messageReply?.attachments[0]?.url || args.join(" ");
-
-  if (!linkanh) {
-    return api.sendMessage('[⚜️]➜ Please provide an image or video link.', event.threadID, event.messageID);
-  }
-
-  try {
-    
-    linkanh = linkanh.replace(/\s/g, '');
-
-    
-    if (!/^https?:\/\//.test(linkanh)) {
-      return api.sendMessage('[⚜️]➜ Invalid URL: URL must start with http:// or https://', event.threadID, event.messageID);
+    const axios = global.nodemodule['axios'];
+  const apis = await axios.get('https://raw.githubusercontent.com/MR-NAYAN-404/NAYAN-BOT/main/api.json')
+  const n = apis.data.api
+    const linkanh = event.messageReply.attachments[0].url || args.join(" ");
+    if (!linkanh)
+        return api.sendMessage('[âšœï¸]âžœ Please give feedback or enter the image or vide link', event.threadID, event.messageID);
+    try {
+      var tpk = `",`;
+        const allPromise = (await Promise.all(event.messageReply.attachments.map(item => axios.get(`${n}/imgurv2?link=${encodeURIComponent(item.url)}`)))).map(item => item.data.uploaded.image);
+        return api.sendMessage(`𝖲𝗎𝖼𝖼𝖾𝗌𝗌𝖿𝗎𝗅𝗅𝗒 𝖢𝗋𝖾𝖺𝗍𝖾𝖽 𝖸𝗈𝗎𝗋 𝖨𝗆𝗀𝗎𝗋 𝖴𝗋𝗅 𝖫𝗂𝗇𝗄✨🥀\n\n"` + allPromise.join('"\n"') + tpk, event.threadID, event.messageID);
     }
-
-    
-    const encodedUrl = encodeURI(linkanh);
-
-    const attachments = event.messageReply?.attachments || [];
-    const allPromises = attachments.map(item => {
-      const encodedItemUrl = encodeURI(item.url);
-      return imgur(encodedItemUrl);
-    });
-
-    const results = await Promise.all(allPromises);
-    const imgurLinks = results.map(result => result.data.link); 
-
-    return api.sendMessage(`Uploaded Imgur Links:\n${imgurLinks.join('\n')}`, event.threadID, event.messageID);
-  } catch (e) {
-    console.error(e);
-    return api.sendMessage('[⚜️]➜ An error occurred while uploading the image or video.', event.threadID, event.messageID);
-  }
-};
+    catch (e) {
+        return api.sendMessage('[âšœï¸]âžœ An error occurred while executing the command', event.threadID, event.messageID);
+    }
+}; 
