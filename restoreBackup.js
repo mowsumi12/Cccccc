@@ -1,6 +1,6 @@
 const fs = require("fs-extra");
 const readline = require("readline");
-const log = require('./NAZRUL/logger/log.js');
+const log = require('./logger/log.js');
 
 let versionBackup;
 const rl = readline.createInterface({
