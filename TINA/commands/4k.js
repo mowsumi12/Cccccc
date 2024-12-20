@@ -1,11 +1,10 @@
 module.exports.config = {
     name: "hd",
     version: "1.0.0",
-    permission: 0,
-    credits: "Nayan",
+    hasPermssion: 0,
+    credits: "Nazrul",
     description: "",
-    prefix: true,
-    category: "prefix",
+    commandCategory: "prefix",
     usages: "[model]",
     cooldowns: 10,
     dependencies: {
