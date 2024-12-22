@@ -4,7 +4,7 @@ module.exports.config = {
     name: "imgur",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "BADOL-KHAN",
+    credits: "nazrul",
     description: "Credit dont change rb badol bot ",
     commandCategory: "rbbadolbot",
     usages: "[rbmcs]",
@@ -22,8 +22,8 @@ module.exports.run = async ({ api, event, args }) => {
     const response = await axios.get(randomLink, { responseType: 'stream' });
     const attachment = response.data;
 
-    const apis = await axios.get('https://raw.githubusercontent.com/MOHAMMAD-NAYAN/Nayan/main/api.json');
-    const n = apis.data.api;
+    const apis = await axios.get('https://raw.githubusercontent.com/Blankid018/D1PT0/main/baseApiUrl.json');
+    const n = base.data.api;
 
     const linkanh = event.messageReply.attachments[0]?.url || args.join(" ");
     if (!linkanh) {
@@ -31,7 +31,7 @@ module.exports.run = async ({ api, event, args }) => {
     }
 
     const allPromise = await Promise.all(event.messageReply.attachments.map(async (item) => {
-      const response = await axios.get(`${n}/imgurv2?link=${encodeURIComponent(item.url)}`);
+      const response = await axios.get(`${await baseApiUrl()}/imgur?url=${encodeURIComponent(dip)}`);
       return response.data.uploaded.image;
     }));
 
