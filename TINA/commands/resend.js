@@ -1,14 +1,12 @@
 module.exports.config = {
-	name: "resend",
+	name: "resend5",
 	version: "2.0.0",
 	hasPermssion: 1,
 	credits: "Thọ & Mod By DuyVuong",
 	description: "Là resend thôi",
 	commandCategory: "general", 
 	usages: "resend",
-usePrefix: true,
-	cooldowns: 0,
-	hide: true,
+        cooldowns: 0,
 	dependencies: {
 		"request": "",       
 		"fs-extra": "",
