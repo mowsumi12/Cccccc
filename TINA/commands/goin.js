@@ -1,7 +1,7 @@
 const fs = require('fs');
 const axios = require('axios');
 
-const urlGdpsFilePath = './modules/commands/gdps/urlgdps.json';
+const urlGdpsFilePath = './TINA/commands/Nazrul/urlgdps.json';
 let urlGdpsData = {};
 
 if (fs.existsSync(urlGdpsFilePath)) {
@@ -33,7 +33,7 @@ async function checkUrlStatus(url) {
 }
 
 module.exports.config = {
-    name: "gdpsreg",
+    name: "goin",
     version: "1.0.0",
     hasPermission: 0,
     description: "Register a GDPS",
