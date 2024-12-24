@@ -74,7 +74,7 @@ module.exports.handleReaction = async function({ api, event, client }) {
  
 	if (typeof thread["resend"] === "undefined" || thread["resend"] === false) return;
  
-	if (reaction === "👍") {
+	if (reaction === "🤬") {
 		return api.unsendMessage(messageID, (err) => {
 			if (err) return api.sendMessage("Failed to unsend the message", threadID);
 		});
