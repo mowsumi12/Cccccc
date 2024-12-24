@@ -6,7 +6,7 @@ module.exports.config = {
     name: "dalle",
     hasPermssion: 0,
     version: "1.0.0",
-    credits: "Jonell Magallanes",
+    credits: "nazrul",
     description: "Image Generator",
     usePrefix: false,
     commandCategory: "AI",
@@ -22,8 +22,8 @@ module.exports.run = async function ({ api, event, args }) {
     }
 
     const prompt = args.join(" ");
-    const url = `https://joshweb.click/dalle?prompt=${encodeURIComponent(prompt)}`;
-const gen = await api.sendMessage("☁️ | Generating the image Please Wait......", event.threadID, event.messageID);
+    const url = `https://ccprojectapis.ddns.net/api/flux?prompt=${encodeURIComponent(prompt)}`;
+const gen = await api.sendMessage("Please Wait...Baby.😘", event.threadID, event.messageID);
     try {
         const response = await axios.get(url, { responseType: 'arraybuffer' });
         const imageDir = path.join(__dirname, 'cache');
