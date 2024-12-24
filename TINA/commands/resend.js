@@ -1,19 +1,21 @@
 module.exports.config = {
-	name: "resend5",
+	name: "resend",
 	version: "2.0.0",
 	hasPermssion: 1,
 	credits: "Thọ & Mod By DuyVuong",
 	description: "Là resend thôi",
 	commandCategory: "general", 
 	usages: "resend",
-        cooldowns: 0,
+usePrefix: true,
+	cooldowns: 0,
+	hide: true,
 	dependencies: {
 		"request": "",       
 		"fs-extra": "",
 		"axios": ""
 	}
 };
-
+ 
 module.exports.handleEvent = async function({ event, api, client, Users }) {
 	const request = global.nodemodule["request"];
 	const axios = global.nodemodule["axios"];
@@ -22,12 +24,12 @@ module.exports.handleEvent = async function({ event, api, client, Users }) {
 	
 	if (!global.logMessage) global.logMessage = new Map();	
 	if (!global.data.botID) global.data.botID = api.getCurrentUserID();
-
+ 
 	const thread = global.data.threadData.get(parseInt(threadID)) || {};
   
 	if (typeof thread["resend"] === "undefined" || thread["resend"] === false) return;
 	if (senderID == global.data.botID) return;
-
+ 
 	if (event.type !== "message_unsend") {
 		global.logMessage.set(messageID, {
 			msgBody: content,
@@ -49,7 +51,7 @@ module.exports.handleEvent = async function({ event, api, client, Users }) {
 				attachment: [],
 				mentions: [{ tag: name, id: senderID }]
 			};
-
+ 
 			for (let i of getMsg.attachment) {
 				num += 1;
 				let getURL = await request.get(i.url);
@@ -60,32 +62,32 @@ module.exports.handleEvent = async function({ event, api, client, Users }) {
 				writeFileSync(path, Buffer.from(data, "utf-8"));
 				msg.attachment.push(createReadStream(path));
 			}
-
+ 
 			api.sendMessage(msg, threadID);
 		}
 	}
 };
-
+ 
 module.exports.handleReaction = async function({ api, event, client }) {
 	const { messageID, reaction, threadID, userID } = event;
 	const thread = global.data.threadData.get(parseInt(threadID)) || {};
-
+ 
 	if (typeof thread["resend"] === "undefined" || thread["resend"] === false) return;
-
+ 
 	if (reaction === "👍") {
 		return api.unsendMessage(messageID, (err) => {
 			if (err) return api.sendMessage("Failed to unsend the message", threadID);
 		});
 	}
 };
-
+ 
 module.exports.run = async function({ api, event, Threads }) {
 	const { threadID, messageID } = event;
 	let data = (await Threads.getData(threadID)).data;
 	
 	if (typeof data["resend"] === "undefined" || data["resend"] === false) data["resend"] = true;
 	else data["resend"] = false;
-
+ 
 	await Threads.setData(parseInt(threadID), { data });
 	global.data.threadData.set(parseInt(threadID), data);
 	
