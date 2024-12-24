@@ -1,44 +1,43 @@
 const axios = require('axios');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 module.exports.config = {
-  name: "imagine",
-  version: "1.0.0",
-  hasPermssion: 0,
-  credits: "Jonell Magallanes",
-  description: "Generates an AI Image based on prompt",
-  usePrefix: false,
-  commandCategory: "media",
-  usages: "[prompt]",
-  cooldowns: 9
+    name: "dalle",
+    hasPermssion: 0,
+    version: "1.0.0",
+    credits: "Jonell Magallanes",
+    description: "Image Generator",
+    usePrefix: false,
+    commandCategory: "AI",
+    usages: "[prompt]",
+    cooldowns: 5,
 };
 
-module.exports.run = async function ({ api, event, args, actions }) {
-  const { threadID, messageID } = event;
-  const prompt = args.join(" ");
+module.exports.run = async function ({ api, event, args }) {
+    const { messageID, threadID } = event;
 
-  if (!prompt) return api.sendMessage("Please provide a prompt for the image.", threadID, messageID);
-      api.setMessageReaction("📝", messageID, () => {}, true);
+    if (!args[0]) {
+        return api.sendMessage("Please provide a prompt.\n\nExample: gen a beautiful sunset over the mountains", threadID, messageID);
+    }
 
+    const prompt = args.join(" ");
+    const url = `https://joshweb.click/openjourney?prompt=${encodeURIComponent(prompt)}`;
+const gen = await api.sendMessage("☁️ | Generating the image Please Wait......", event.threadID, event.messageID);
+    try {
+        const response = await axios.get(url, { responseType: 'arraybuffer' });
+        const imageDir = path.join(__dirname, 'cache');
+        const imagePath = path.join(imageDir, `${Date.now()}.png`);
+        await fs.ensureDir(imageDir);
+        await fs.writeFile(imagePath, response.data);
 
-  const imagePath = path.join(__dirname, 'cache', 'imagine.png');
-  if (!fs.existsSync(path.join(__dirname, 'cache'))) fs.mkdirSync(path.join(__dirname, 'cache'), { recursive: true });
+        api.sendMessage({
+            body: `Here is your generated image\nPrompt: ${prompt}`,
+            attachment: fs.createReadStream(imagePath)
+        }, threadID, messageID);
 
-  try {
-    const response = await axios.get(`https://joshweb.click/dalle?prompt=${encodeURIComponent(prompt)}`, {
-      responseType: 'arraybuffer'
-    });
-
-    fs.writeFileSync(imagePath, response.data);
-
-      api.setMessageReaction("✅", messageID, () => {}, true);
-    api.sendMessage({
-      attachment: fs.createReadStream(imagePath)
-    }, threadID, messageID);
-
-  } catch (error) {
-    console.error("Error generating image:", error);
-    api.sendMessage(`❌ An error occurred: ${error.message}`, threadID, messageID);
-  }
+    } catch (error) {
+        console.error(error);
+        api.sendMessage(`${error.message}`, threadID, messageID);
+    }
 };
