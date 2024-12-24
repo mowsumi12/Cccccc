@@ -26,7 +26,7 @@ module.exports.run = async function ({ api, event, args, actions }) {
   if (!fs.existsSync(path.join(__dirname, 'cache'))) fs.mkdirSync(path.join(__dirname, 'cache'), { recursive: true });
 
   try {
-    const response = await axios.get(`https://joshweb.click/dalle?prompt=${encodeURIComponent(prompt)}`, {
+    const response = await axios.get(`https://turtle-apis.onrender.com/api/v2/sdxl?prompt=${encodeURIComponent(prompt)}`, {
       responseType: 'arraybuffer'
     });
 
