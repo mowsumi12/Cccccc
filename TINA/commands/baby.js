@@ -10,10 +10,9 @@ module.exports.config = {
   version: "6.9.9",
   credits: "dipto",
   cooldowns: 0,
-  permission: 0,
+  hasPermssion: 0,
   description: "better than all sim simi",
-  category: "chat",
-  prefix: true,
+  commandCategory: "chat",
   usages: `[anyMessage] OR\nteach [YourMessage] - [Reply1], [Reply2], [Reply3]... OR\nteach [react] [YourMessage] - [react1], [react2], [react3]... OR\nremove [YourMessage] OR\nrm [YourMessage] - [indexNumber] OR\nmsg [YourMessage] OR\nlist OR\nall OR\nedit [YourMessage] - [NewMessage]`,
 };
 
