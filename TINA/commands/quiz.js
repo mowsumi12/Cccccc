@@ -1,87 +1,65 @@
-const axios = require("axios");
-const baseApiUrl = async () => {
-    const base = await axios.get(
-        "https://raw.githubusercontent.com/Blankid018/D1PT0/main/baseApiUrl.json"
-    );
-    return base.data.api;
+module.exports.config = { usePrefix: true,
+	name: "quiz",
+	version: "1.0.0",
+	credits: "SAKIBIN",
+	hasPermssion: 0,
+	description: "Answer question",
+	commandCategory: "game-mp",
+	cooldowns: 5,
+	dependencies: {
+		"axios": ""
+	}
 };
 
-module.exports.config = {
-    name: "quiz2",
-    version: "1.0",
-    credits: "Mesbah Bb'e",
-    cooldowns: 5,
-    hasPermission: 0,
-    description: "quiz",
-    commandCategory: "MEDIA",
-    category: "MEDIA",
-    usePrefix: true,
-    prefix: true,
-    usages: "/quiz",
-};
+module.exports.handleReaction = ({ api, event, handleReaction }) => {
+	if (!event.userID == handleReaction.author) return;
+	let response = "";
+	if (event.reaction != "👍" && event.reaction != "😢") return;
+	if (event.reaction == "👍") response = "True"
+	else if (event.reaction == "😢") response = "False";
+	if (response == handleReaction.answer) api.sendMessage(`Congratulations\n\nyou got the answer right`, event.threadID, () => {
+					
+					setTimeout(function(){ api.unsendMessage(handleReaction.messageID); }, 5000);
+				});
 
-module.exports.run = async function ({ api, event }) {
-    const { threadID: t, messageID: m } = event;
-    try {
-        const response = await axios.get(`${await baseApiUrl()}/quiz3?randomQuiz=random`);
-        const imageStream = await axios({
-            method: "GET",
-            url: response.data.link,
-            responseType: 'stream'
-        });
+	else api.sendMessage(`Sorry your answer is wrong\n\nBetter luck next time`, event.threadID);
+	const indexOfHandle = client.handleReaction.findIndex(e => e.messageID == handleReaction.messageID);
+	global.client.handleReaction.splice(indexOfHandle, 1);
+	handleReaction.answerYet = 1;
+	return global.client.handleReaction.push(handleReaction);
+}
 
-        api.sendMessage({
-            body: "Please reply to this photo with your answer:",
-            attachment: imageStream.data
-        }, t, (error, info) => {
-            global.client.handleReply.push(info.messageID, {
-                commandName: this.config.name,
-                author: event.senderID,
-                messageID: info.messageID,
-                correctAnswer: response.data.quiz,
-                rewardAmount: 200
-            });
-            setTimeout(async () => {
-                await api.unsendMessage(info.messageID);
-            }, 30000);
-        },m);
-
-    } catch (error) {
-        console.error(error);
-        api.sendMessage(`Error: ${error.message}`, t);
+module.exports.run = async ({  api, event, args }) => {
+	const axios = global.nodemodule["axios"];
+	const request = global.nodemodule["request"];	
+	let difficulties = ["easy", "medium", "hard"];
+	let difficulty = args[0];
+	(difficulties.some(item => difficulty == item)) ? "" : difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
+	let fetch = await axios(`https://opentdb.com/api.php?amount=1&encode=url3986&type=boolean&difficulty=${difficulty}`);
+	if (!fetch.data) return api.sendMessage("The question could not be found due to a busy server\n\nPlease contact the developer to fix this issue\n\nDeveloper: 𝙍𝙖𝙩𝙪𝙡 𝙃𝙖𝙨𝙨𝙖𝙣", event.threadID, event.messageID);
+	let decode = decodeURIComponent(fetch.data.results[0].question);
+	return request(encodeURI(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${decode}`),(err, response, body) => {
+	if (err) return api.sendMessage("An error has occurred", event.threadID, event.messageID);
+	var retrieve = JSON.parse(body);
+	var text = '';
+	retrieve[0].forEach(item => (item[0]) ? text += item[0] : '');
+	var fromLang = (retrieve[2] === retrieve[8][0][0]) ? retrieve[2] : retrieve[8][0][0]
+	return api.sendMessage(`Here is the question for you:\n\n${text}\n\n   👍: True       😢: False`, event.threadID, async (err, info) => {
+		global.client.handleReaction.push({
+			name: "quiz",
+			messageID: info.messageID,
+			author: event.senderID,
+			answer: fetch.data.results[0].correct_answer,
+			answerYet: 0
+		});
+		await new Promise(resolve => setTimeout(resolve, 20 * 1000));
+		const indexOfHandle = global.client.handleReaction.findIndex(e => e.messageID == info.messageID);
+		let data = global.client.handleReaction[indexOfHandle];
+		if (data.answerYet !== 1) {
+			api.sendMessage(`‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎     ‎‎‎‎‎‎‎‎‎‎‎‎‎‎❒ TIME OUT ❒\nthe correct answer is:\n\n➫${fetch.data.results[0].correct_answer}`, event.threadID, info.messageID);
+			return global.client.handleReaction.splice(indexOfHandle, 1);
+		}
+		else return;
+	});
+})
     }
-};
-
-module.exports.handleReply = async function ({ api, Users, handleReply, args, event }) {
-    const { threadID: t, senderID: s, messageID: m } = event;
-    const { author, correctAnswer, messageID, rewardAmount } = handleReply;
-    if (s !== author) return;
-
-    try {
-        const userAnswer = args.join(" ").trim();
-        const isCorrect = (userAnswer.toLowerCase() === correctAnswer.toLowerCase());
-        const userData = await Users.get(s);
-        const name = userData.name;
-
-        if (isCorrect) {
-         await api.unsendMessage(messageID);
-            userData.money += rewardAmount;
-            await usersData.set(s, userData);
-            await api.sendMessage({
-                body: `Correct answer, ${name}! You earned ${rewardAmount}$.`,
-                mentions: [{ tag: name, id: s }]
-            }, t, m);
-        } else {
-          await api.unsendMessage(messageID);
-         global.client.handleReply.pop(messageID);
-            userData.money -= 5;
-            await usersData.set(s, userData);
-            await api.sendMessage({
-                body: "Incorrect answer, try again.",
-            }, t, m);
-        }
-    } catch (error) {
-        console.error(error);
-        api.sendMessage(`Error: ${error.message}`, t);
-    }
-};
