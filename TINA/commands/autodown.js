@@ -2,7 +2,7 @@ var r = ["jn6PoPho", "WKd4XzHX", "FI6bX3kC"];
 const api = r[Math.floor(Math.random() * r.length)];
 
 var configCommand = {
-    name: 'autodown',
+    name: 'autodown5',
     version: '1.1.1',
     hasPermssion: 0,
     credits: 'DC-Nam', 
