@@ -152,14 +152,14 @@ try{
    
 module.exports.handleEvent = async function ({ api, event }) {
 try{
-    const name = await Users.getNameUser(event.senderID);
-const body = event.body ? event.body.toLowerCase() : ""
+    const body = event.body ? event.body.toLowerCase() : ""
     if(body.startsWith("sumi") || body.startsWith("riya") || body.startsWith("সুমি")){
         const arr = body.replace(/^\S+\s*/, "")
       if(!arr) {
        const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
+const name = await Users.getNameUser(events.senderID);
       const r = ran[Math.floor(Math.random() * ran.length)];
-      return api.sendMessage(${name}, ${r}, event.threadID, (error, info) => {
+      return api.sendMessage(${namee},r, event.threadID, (error, info) => {
           global.client.handleReply.push({
             name: this.config.name,
             type: "reply",
