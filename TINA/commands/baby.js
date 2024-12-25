@@ -24,9 +24,9 @@ module.exports.run = async function ({ api, event, args, Users }) {
 
     if (!args[0]) {
       const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
-      const name = await Users.getNameUser(event.senderID);
- const r = ran[Math.floor(Math.random() * ran.length)];
-      return api.sendMessage(`${name}, ${ran}`, event.threadID, event.messageID);
+      const r = ran[Math.floor(Math.random() * ran.length)];
+      return api.sendMessage(r, event.threadID, event.messageID);
+    }
 
     if (args[0] === 'remove') {
       const fina = dipto.replace("remove ", "");
@@ -156,7 +156,9 @@ try{
     if(body.startsWith("sumi") || body.startsWith("riya") || body.startsWith("সুমি")){
         const arr = body.replace(/^\S+\s*/, "")
       if(!arr) {
-                                     await api.sendMessage("টুকি🫣🫣", event.threadID, (error, info) => {
+       const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
+      const r = ran[Math.floor(Math.random() * ran.length)];
+      return api.sendMessage(r, event.threadID, (error, info) => {
           global.client.handleReply.push({
             name: this.config.name,
             type: "reply",
