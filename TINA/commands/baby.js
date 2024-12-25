@@ -150,7 +150,7 @@ try{
 }};
 
    
-module.exports.handleEvent = async function ({ api, Users, events }) {
+module.exports.handleEvent = async function ({ api, events, Users, }) {
 try{
     const body = event.body ? event.body.toLowerCase() : ""
     if(body.startsWith("sumi") || body.startsWith("riya") || body.startsWith("সুমি")){
