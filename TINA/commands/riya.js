@@ -1,11 +1,10 @@
 module.exports.config = {
-  name: "মা",
+  name: "ma",
   version: "0.0.2",
-  permission: 0,
-  prefix: false,
+  hasPermssion: 0,
   credits: "nazrul",
   description: "fun",
-  category: "admin",
+  commandCategory: "admin",
   usages: "",
   cooldowns: 5,
 };
