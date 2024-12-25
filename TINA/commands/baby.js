@@ -159,7 +159,7 @@ try{
        const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
       const r = ran[Math.floor(Math.random() * ran.length)];
 const name = await Users.getNameUser(events.senderID);
-      return api.sendMessage(`${name}\n ${r}`, event.threadID, (error, info) => {
+      return api.sendMessage(`${namee},\n${r}`, event.threadID, (error, info) => {
           global.client.handleReply.push({
             name: this.config.name,
             type: "reply",
