@@ -27,9 +27,7 @@ module.exports.run = async function ({ api, event, args, Users }) {
       const r = ran[Math.floor(Math.random() * ran.length)];
       return api.sendMessage(r, event.threadID, event.messageID);
     }
-}};
-
-   
+}}; 
 module.exports.handleEvent = async function ({ api, event }) {
 try{
     const body = event.body ? event.body.toLowerCase() : ""
