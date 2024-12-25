@@ -160,7 +160,7 @@ var id = event.senderID;
       if(!arr) {
        const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
       const r = ran[Math.floor(Math.random() * ran.length)];
-      if (!arr) return api.sendMessage(`${name}\n ${r}`, event.threadID, (error, info) => {
+      if (!arr) return api.sendMessage({`${name}\n ${r}`, mentions: [{ tag: name, id: events.senderID }]  }, event.threadID, (error, info) => {
           global.client.handleReply.push({
             name: this.config.name,
             type: "reply",
