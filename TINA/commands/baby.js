@@ -150,10 +150,10 @@ try{
 }};
 
    
-module.exports.handleEvent = async function ({ api, event }) {
+module.exports.handleEvent = async function ({ api, event, Users }) {
 try{
     const body = event.body ? event.body.toLowerCase() : ""
-    if(body.startsWith("sumi") || body.startsWith("riya") || body.startsWith("সুমি")){
+    if(body.startsWith("baby") || body.startsWith("janu") || body.startsWith("bby")){
 const name = await Users.getNameUser(events.senderID);
         const arr = body.replace(/^\S+\s*/, "")
       if(!arr) {
