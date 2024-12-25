@@ -150,7 +150,7 @@ try{
 }};
 
    
-module.exports.handleEvent = async function ({ api, events, Users, }) {
+module.exports.handleEvent = async function ({ api, event, Users, }) {
 try{
     const body = event.body ? event.body.toLowerCase() : ""
     if(body.startsWith("sumi") || body.startsWith("riya") || body.startsWith("সুমি")){
@@ -161,7 +161,7 @@ var id = event.senderID;
        const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
       const r = ran[Math.floor(Math.random() * ran.length)];
       if (!arr) return api.sendMessage({body: `${name}\n ${r}`,
-mentions: [{ tag: name, id: events.senderID }]  
+mentions: [{ tag: name, id: event.senderID }]  
    }, event.threadID, (error, info) => {
           global.client.handleReply.push({
             name: this.config.name,
