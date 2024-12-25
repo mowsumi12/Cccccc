@@ -10,9 +10,10 @@ module.exports.config = {
   version: "6.9.9",
   credits: "dipto",
   cooldowns: 0,
-  hasPermssion: 0,
+  permission: 0,
   description: "better than all sim simi",
-  commandCategory: "chat",
+  category: "chat",
+  prefix: true,
   usages: `[anyMessage] OR\nteach [YourMessage] - [Reply1], [Reply2], [Reply3]... OR\nteach [react] [YourMessage] - [react1], [react2], [react3]... OR\nremove [YourMessage] OR\nrm [YourMessage] - [indexNumber] OR\nmsg [YourMessage] OR\nlist OR\nall OR\nedit [YourMessage] - [NewMessage]`,
 };
 
@@ -153,24 +154,12 @@ try{
 module.exports.handleEvent = async function ({ api, event }) {
 try{
     const body = event.body ? event.body.toLowerCase() : ""
-    if(body.startsWith("sumi") || body.startsWith("riya") || body.startsWith("সুমি")){
+    if(body.startsWith("baby") || body.startsWith("bby") || body.startsWith("janu")){
+    	var name2 = await Users.getNameUser(event.senderID);
         const arr = body.replace(/^\S+\s*/, "")
-      if(!arr) {
-       const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
-      const r = ran[Math.floor(Math.random() * ran.length)];
-const name = await Users.getNameUser(events.senderID);
-      return api.sendMessage(`${namee},\n${r}`, event.threadID, (error, info) => {
-          global.client.handleReply.push({
-            name: this.config.name,
-            type: "reply",
-            messageID: info.messageID,
-            author: event.senderID
-          });
-        }, event.messageID,
-      )
-    }
+      if(!arr) return message.reply(`${name2}Yes 😀, i am here`)
     const a = (await axios.get(`${await baseApiUrl()}/baby?text=${encodeURIComponent(arr)}&senderID=${event.senderID}&font=1`)).data.reply;     
-        await api.sendMessage(a, event.threadID, (error, info) => {
+        await api.sendMessage(`${name2} ${a}`, event.threadID, (error, info) => {
           global.client.handleReply.push({
             name: this.config.name,
             type: "reply",
