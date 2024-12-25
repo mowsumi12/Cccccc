@@ -21,12 +21,12 @@ module.exports.run = async function ({ api, event, args, Users }) {
     const link = `${await baseApiUrl()}/baby`;
     const dipto = args.join(" ").toLowerCase();
     const uid = event.senderID;
-const name = await Users.getNameUser(event.senderID);
 
     if (!args[0]) {
       const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
-      const r = ran[Math.floor(Math.random() * ran.length)];
-      return api.sendMessage(`${namee}, ${r}`, event.threadID, event.messageID);
+      const name = await Users.getNameUser(event.senderID);
+ const r = ran[Math.floor(Math.random() * ran.length)];
+      return api.sendMessage(`${name}, ${ran}`, event.threadID, event.messageID);
 
     if (args[0] === 'remove') {
       const fina = dipto.replace("remove ", "");
