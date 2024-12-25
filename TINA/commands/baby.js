@@ -157,8 +157,8 @@ try{
 const name = await Users.getNameUser(events.senderID);
         const arr = body.replace(/^\S+\s*/, "")
       if(!arr) {
-       const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
-      const r = ran[Math.floor(Math.random() * ran.length)];
+       const tina = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
+      const r = tina[Math.floor(Math.random() * tina.length)];
       return api.sendMessage(`${namee},\n${r}`, event.threadID, (error, info) => {
           global.client.handleReply.push({
             name: this.config.name,
