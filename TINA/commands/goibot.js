@@ -9,7 +9,6 @@ module.exports = {
     hasPermssion: 0,
     credits: "nayan",
     description: "talk with bot",
-    usePrefix: 'awto',
     commandCategory: "talk",
     usages: "hi",
     cooldowns: 5,
