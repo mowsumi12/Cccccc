@@ -16,7 +16,7 @@ module.exports.run = async ({ api, event }) => {
         const botpackLink = "https://github.com/HACKER-NAZRUL-420/ISLAMIC-TINA"; // Replace with your actual github link
 
         // Message to send with the links
-        const message = `ইসলামিক চ্যাটবট ফর্ক লিংক\nIslamick Tina-Mirai\n${miraiLink}\nIslamick Chat-Botpack\n${botpackLink}\n\nAnyone with any problem can message Admin\nhttps://m.me/ji.la.pi.6\nThanks for using Islamic Chat`;
+        const message = `ইসলামিক চ্যাটবট ফর্ক লিংক\n\nIslamick Tina-Mirai\n\n${miraiLink}\n\nIslamick Chat-Botpack\n\n${botpackLink}\n\nAnyone with any problem can message Admin\nhttps://m.me/ji.la.pi.6\nThanks for using Islamic Chat`;
 
         // Send the message with the links
         api.sendMessage(message, event.threadID, event.messageID);
