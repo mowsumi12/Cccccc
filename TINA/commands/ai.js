@@ -46,7 +46,7 @@ var IDs = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
 var randomIDs = Math.floor(Math.random() * IDs.length);
 
-const res = await axios.get(`https://geminipro-3rhs.onrender.com/chat-with-gemini?ask=${ask}&id=${randomIDs}`);
+const res = await axios.get(`https://geminipro-3rhs.onrender.com/chat?ask=${ask}&id=${randomIDs}`);
 
 const reply = res.data.response;
 
