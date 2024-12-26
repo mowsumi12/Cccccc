@@ -6,7 +6,7 @@ module.exports.config = {
   name: "videoDownloader",
   version: "1.0.0",
   hasPermission: 0,
-  credits: "Sakibin",
+  credits: "Nazrul",
   description: "Automatically downloads videos from TikTok, Facebook, and Instagram when a link is provided.",
   commandCategory: "utility",
   usages: "Send a TikTok, Facebook, or Instagram video link to download.",
@@ -34,7 +34,7 @@ async function downloadVideo(videoUrl, threadID, api) {
 
       videoStream.on('finish', () => {
         api.sendMessage({
-          body: `Here is your downloaded video: ${videoTitle}`,
+          body: `𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐝 𝐘𝐨𝐮𝐫 𝐕𝐢𝐝𝐞𝐨 ${videoTitle}`,
           attachment: fs.createReadStream(videoPath),
         }, threadID, () => {
           fs.unlinkSync(videoPath); // Delete video file after sending
@@ -75,7 +75,7 @@ module.exports.handleEvent = async function({ api, event }) {
     const videoUrl = match[0]; // Take the first matched URL
 
     // Notify the user and ask them to react to the message to start the download
-    api.sendMessage("Video Link ditected 🔗\nReact 👍 to download video", threadID, (error, messageInfo) => {
+    api.sendMessage("Reaction ❤️ to this message to download the video", threadID, (error, messageInfo) => {
       if (error) return console.error(error);
 
       // Store the reaction handler data
