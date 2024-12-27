@@ -1,23 +1,47 @@
-module.exports.config = {
-  name: "restart",
-  version: "1.0.0",
-  hasPermssion: 2,
-  credits: "NAZRUL",
-  description: "Restart the Bot",
-  commandCategory: "system",
-  usages: "",
-  cooldowns: 5
-};
+const fs = require('fs');
 
-module.exports.run = async function ({ api, args, Users, event }) {
-  var mention = Object.keys(event.mentions)[0];
-  let name = event.mentions[mention];
-  var arraytag = [];
-  arraytag.push({ id: mention });
-  var a = function (a) { api.sendMessage(a, event.threadID); }
-  a("✅𝙔𝙤𝙪𝙧 𝙬𝙞𝙨𝙝 𝙞𝙨 𝙢𝙮 𝙘𝙤𝙢𝙢𝙖𝙣𝙙, 𝙍𝙚𝙨𝙩𝙖𝙧𝙩𝙞𝙣𝙜 𝙞𝙣..");
-  setTimeout(() => { a({ body: "3.." }) }, 5000);
-  setTimeout(() => { a({ body: "2.." }) }, 10000);
-  setTimeout(() => { a({ body: "1.." }) }, 15000);
-  setTimeout(() => { api.sendMessage("⏳𝙋𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩 𝙛𝙤𝙧 𝙖 𝙢𝙞𝙣𝙪𝙩𝙚, 𝙍𝙚𝙗𝙤𝙤𝙩𝙞𝙣𝙜 𝙨𝙮𝙨𝙩𝙚𝙢..", event.threadID, () => process.exit(1)) }, 20000);
+module.exports.config = {
+    name: "restart",
+    hasPermssion: 2,
+    description: "Restarts the bot",
+    usePrefix: true, 
+    commandCategory: "System",
+    usages: "restart",
+        hide: true,
+    cooldowns: 20,
 };
+    module.exports.run = async function ({ api, event }) {
+        const threadID = event.threadID;
+
+        console.log(`Restarting command from thread ${threadID}`);
+
+        const data = {
+            threadID: threadID
+        };
+
+        fs.writeFile('./threadID.json', JSON.stringify(data), (err) => {
+            if (err) {
+                console.error("Failed to save threadID:", err);
+                return;
+            }
+            console.log("ThreadID saved to threadID.json");
+
+            setTimeout(() => {
+                fs.unlink('./threadID.json', (err) => {
+                    if (err) {
+                        console.error("Failed to delete threadID.json:", err);
+                        return;
+                    }
+                    console.log("threadID.json deleted");
+                });
+            }, 5000);
+        });
+
+        api.sendMessage("🔃 𝗥𝗲𝘀𝘁𝗮𝗿𝘁𝗶𝗻𝗴 𝗣𝗿𝗼𝗰𝗲𝘀𝘀\n━━━━━━━━━━━━━━━━━━\nBot is restarting...", threadID, (err) => {
+            if (err) {
+                console.error("Failed to send restart message:", err);
+            } else {
+                process.exit(1);
+            }
+        });
+    };
