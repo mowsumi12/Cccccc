@@ -2,77 +2,52 @@ module.exports.config = {
     name: "tag",
     version: "1.0.0",
     hasPermssion: 1,
-    credits: "Ntkhang",
-    description: "Tag liên tục người bạn tag trong 5 lần\nCó thể gọi là gọi hồn người đó",
-    commandCategory: "group",
-    usages: "taglientuc @mention",
+    credits: "RAHAT",
+    description: "Tag liên tục người bạn muốn gọi hồn , phiên bản nâng cấp",
+    commandCategory: "Group",
+    usages: "@mention",
     cooldowns: 5,
     dependencies: {
         "fs-extra": "",
         "axios": ""
     }
-}
-
-module.exports.run = async function({ api, args, Users, event }) {
+};
+module.exports .run = async function({ api, args, Users, event }) {
   function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  };
   const { mentions, threadID, messageID } = event;
   function reply(body) {
     api.sendMessage(body, threadID, messageID);
   }
-  if (!global.client.modulesTaglientuc) global.client.modulesTaglientuc = [];
-  const dataTaglientuc = global.client.modulesTaglientuc;
-  if (!dataTaglientuc.some(item => item.threadID == threadID)) dataTaglientuc.push({ threadID, targetID: []});
-  const thisTaglientuc = dataTaglientuc.find(item => item.threadID == threadID);
-  if (args[0] == "stop") {
-    if (args[1] == "all") {
-      thisTaglientuc.targetID = [];
-      return reply("Đã tắt gọi hồn tất cả");
-    }
-    else {
-      if (Object.keys(mentions).length == 0) return reply("Hãy tag người bạn muốn dừng gọi hồn");
-      let msg = "";
-      for (let id in mentions) {
-        
-        const userName = mentions[id].replace("@", "");
-        if (!thisTaglientuc.targetID.includes(id)) msg += `\n${userName} hiện tại không bị gọi hồn`;
-        else {
-          thisTaglientuc.targetID.splice(thisTaglientuc.targetID.findIndex(item => item == id, 1));
-          msg += `\nĐã tắt gọi hồn ${userName}`;
-        }
-      }
-      return reply(msg);
-    }
+  let solantag = args[args.length - 2];
+  let time = args[args.length - 1];
+  if (Object.keys(mentions) == 0 && args[0] != "stop") return reply("Please tag the person you want to call the soul");
+  if ((!solantag || !time) && args[0] != "stop") reply("Sai cú pháp !!!\n\nHD: taglientuc @tag nội dung 5 2\nTrong đó: 5 là số lần tag 2 là số thời gian mỗi lần tag");
+  if (isNaN(solantag) && args[0] != "stop") return reply("The number of times the tag must be a number\n\nHD: taglientuc @tag Hi 10 2\nWhere: Hi is the content to be tagged\n10 is the number of times the tag\n2 is the pause time after each tag");
+  if (isNaN(time) && args[0] != "stop") return reply("Thời gian giữa mỗi lần tag phải là một con số");
+  time = time * 1000;
+  const target = Object.keys(mentions)[0];
+  var name = (await Users.getData(target)).name
+  var mentionsTag = [];
+  mentionsTag.push({
+    id: target,
+    tag: name
+  })
+  let i = 0;
+  if (["stop", "clear"].includes(args[0])) {
+    clearTimeout(time);
+    time = 0;
+    i = solantag;
+    return reply("done");
   }
-  else {
-    let solantag = args[args.length - 2];
-    let time = args[args.length - 1];
-                  // Check syntax
-    if (Object.keys(mentions) == 0) return reply("Vui lòng tag người bạn muốn gọi hồn");
-    if (!solantag || !time) return global.utils.throwError(this.config.name, threadID, messageID);
-    if (isNaN(solantag)) return reply("Số lần tag phải là một con số");
-    if (isNaN(time)) return reply("Thời gian giữa mỗi lần tag phải là một con số");
-    time = time*1000;
-    const target = Object.keys(mentions)[0];
-    if (thisTaglientuc.targetID.includes(target)) return reply("Người này đang được gọi hồn");
-    thisTaglientuc.targetID.push(target);
-    reply(`Đã thêm ${mentions[target].replace("@", "")} vào danh sách gọi hồn với:\nSố lần tag là: ${solantag}\nThời gian giữa các lần tag là ${time/1000} giây`);
-    const noidungtag = args.slice(0, args.length - 2).join(" ").replace("@", "");
-    
-    let i = 0;
-    while (true) {
-      await delay(time);
-      if (i == solantag) {
-        thisTaglientuc.targetID.splice(thisTaglientuc.targetID.findIndex(item => item == target, 1));
-        break;
-      }
-      if (!global.client.modulesTaglientuc.find(item => item.threadID == threadID).targetID.includes(target)) break;
-      await api.sendMessage({
-        body: noidungtag,
-        mentions: [{ id: target, tag: noidungtag }]
-      }, threadID);
-      i++;
-    }
-  }
-};
+  reply(`Oky Boss Tag star kora holo<>credits Khan Rahul RK`);
+  var noidungtag = args.slice(2, args.length - 2).join(" ");
+  for (i = 0; i < solantag; i++) {
+    await delay(time);
+    api.sendMessage({
+      body: '' + name + ' ' + noidungtag,
+      mentions: mentionsTag
+    }, threadID);
+  };
+}
