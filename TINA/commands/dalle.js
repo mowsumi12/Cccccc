@@ -18,7 +18,7 @@ const fs = require('fs-extra');
   if (!query) return api.sendMessage("𝐏𝐥𝐞𝐚𝐬𝐞 𝐏𝐫𝐨𝐯𝐢𝐝𝐞 𝐚 𝐏𝐫𝐨𝐦𝐩𝐭 𝐅𝐨𝐫 𝐓𝐡𝐞 𝐢𝐦𝐚𝐠𝐞....", threadID, messageID);
   api.sendMessage("𝐏𝐥𝐞𝐚𝐬𝐞 𝐖𝐚𝐢𝐭 𝐁𝐚𝐛𝐲...😘",event.threadID, event.messageID);
 let path = __dirname + `/cache/poli.png`;
-  const poli = (await axios.get(`https://www.samirxpikachu.run.place/imagine/prompt/${query}`, {
+  const poli = (await axios.get(`https://milanbhandari.onrender.com/flux/prompt/${query}`, {
     responseType: "arraybuffer",
   })).data;
   fs.writeFileSync(path, Buffer.from(poli, "utf-8"));
