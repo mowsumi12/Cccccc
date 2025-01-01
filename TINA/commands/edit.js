@@ -1,7 +1,7 @@
 module.exports.config = {
     name: "edit",
     version: "1.0.0",
-    hasPermssion: 3,
+    hasPermssion: 0,
     credits: "DongDev",
     description: "Edit tin nhắn bot vip pro",
     commandCategory: "Admin",
