@@ -18,10 +18,10 @@ module.exports.run = async function({ api, event, args }) {
   const configPath = './Nazrul.json';
 
   // Load the config file
-  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  const Nazrul = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
   // Get the list of admins
-  const admins = config.NDH || [];
+  const admins = Nazrul.NDH || [];
 
   // Handle different subcommands
   switch (args[0]) {
