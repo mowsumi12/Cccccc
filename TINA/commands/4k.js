@@ -1,56 +1,69 @@
-const { get } = require('axios');
-const { writeFileSync, createReadStream, unlinkSync } = require('fs-extra');
-const { shorten } = require('tinyurl');
+const imgur = require("imgur");
+const fs = require("fs");
+const axios = require("axios");
+const moment = require("moment-timezone");
+const { downloadFile } = require("../../utils/index");
 
 module.exports.config = {
-  name: "4k",
-  version: "1.6.9",
-  credits: "dipto",//** original owner MR.AYAN...this cmd convert to mirai now**//
-  hasPermission: 0,
-  usePrefix: false,
-  commandCategory: "image",
-  cooldowns: 4,
-  description: "Image enhancer",
-  usage: "<p> 4k [reply to an image]",
-  };
+ name: "4k",
+ version: "1.0.0",
+ hasPermssion: 0,
+ credits: "DongDev",
+ description: "Tăng độ phân giải hình ảnh lên 4K",
+ commandCategory: "Tiện ích",
+ usages: "[reply]",
+ cooldowns: 0,
+ images: [
+ "https://files.catbox.moe/cbkjr1.jpeg",
+ "https://files.catbox.moe/5dmlyd.jpeg"
+ ],
+};
 
-  module.exports.run = async function ({ api, event, args }) {
-    const { threadID, messageID } = event;
+module.exports.run = async ({ api, event, Users }) => {
+ const { threadID, type, messageReply, messageID } = event;
+ let name = await Users.getNameUser(event.senderID);
+ 
+ const ClientID = "771631e18e73452";
+ const upscaleAPI = "http://server.gamehosting.vn:25755/taoanhdep/lamnetanh";
 
-    const photoUrl = event.messageReply?.attachments[0]?.url || args.join(' ');
-    
-    if (!photoUrl) {
-      api.sendMessage("🔰 | Please reply to a photo to proceed enhancing images...", threadID, messageID);
-      return;
-    }
-    const finalUrl = await shorten(photoUrl);
+ if (type !== "message_reply") {
+ return api.sendMessage("⚠️ Bạn phải reply một hình ảnh nào đó", threadID, messageID);
+ }
 
-      api.sendMessage("⏳ | Enhancing please wait...", threadID, async () => {
-   try {
+ if (messageReply.attachments.length !== 1) {
+ return api.sendMessage("⚠️ Bạn chỉ có thể xử lý mỗi hình ảnh một lần", threadID, messageID);
+ }
 
-   const { data } = await get(`https://noobs-api.onrender.com/dipto/4k?img=${encodeURIComponent(finalUrl)}&key=dipto008`);
+ imgur.setClientId(ClientID);
 
-   const result = data.dipto;
-   const author = data.author;
-   const ShortUrl = await shorten(result);
-     
-   const path = __dirname + `/cache/fuck.jpg`;
+ const startTime = Date.now();
+ const initialMessage = `⏱️ | Tiến hành tăng độ phân giải, vui lòng chờ...`;
+ api.sendMessage(initialMessage, threadID, messageID);
 
-   const img = (await get(result, { responseType: "arraybuffer" })).data;
+ const attachment = messageReply.attachments[0];
+ const pathSave = __dirname + `/cache/${startTime}.jpg`;
+ const url = attachment.url;
+ let processingTime = 0;
 
+ await downloadFile(url, pathSave);
 
-   writeFileSync(path, Buffer.from(img, "binary"));
-   api.setMessageReaction("✅", messageID, (err) => {}, true);
+ const uploadStartTime = Date.now();
+ const uploadPromise = imgur.uploadFile(pathSave);
+ const getLink = await uploadPromise;
+ const uploadEndTime = Date.now();
 
-    api.sendMessage({
-      body: `
-      ✅ | Successfully Enhanced Your Image...
-      🔰 | Author: 𝑴𝑹. 𝑨𝒀𝑨𝑵 👑🪽 
-      ☂ | Download Link: ${ShortUrl}`,
-      attachment: createReadStream(path)
-    }, threadID, () => unlinkSync(path), messageID);
-  } catch (error) {
-    api.sendMessage("❎ | " + error, threadID, messageID)
-  }
- });
+ fs.unlinkSync(pathSave);
+
+ processingTime = ((uploadEndTime - startTime) / 1000).toFixed(2);
+
+ const upscaleRes = (await axios({ url: (await axios(`${upscaleAPI}?url=${getLink.link}`)).data.data,
+ method: "GET",
+ responseType: "stream" })).data;
+
+ processingTime = parseFloat(processingTime).toFixed(2);
+
+ api.sendMessage({ 
+ body: `✅ Xử lý ảnh thành công\n👤 Người yêu cầu: ${name}\n⌛ Thời gian xử lý: ${processingTime} giây\n───────────────────\n⏰ Time: ${moment.tz("Asia/Ho_Chi_Minh").format("HH:mm:ss || DD/MM/YYYY")}`, 
+ attachment: upscaleRes 
+ }, threadID);
 };
