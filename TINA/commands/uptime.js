@@ -2,7 +2,7 @@ module.exports.config = {
   name: "uptime",
   version: "1.0.0",
   hasPermssion: 0,
-  credits: "Mirai-Team",
+  credits: "nazrul",
   hide: true,
   description: "Random images by api - uptime",
   commandCategory: "administrators",
@@ -114,7 +114,7 @@ let l1 = await loadImage(pathAva);
     ctx.filter = "brightness(90%) contrast(110%)";
     ctx.font = "130px phenomicon";
     ctx.fillStyle = lengthchar[id].colorBg;
-    ctx.fillText(global.config.BOTNAME, 835, 340);
+    ctx.fillText(global.config.BOTNAME, 735, 340);
     ctx.beginPath();
   ////////////////////////////////////////
    registerFont(__dirname + `/cache/UTM-Avo.ttf`, {
@@ -140,7 +140,7 @@ registerFont(__dirname + `/cache/CaviarDreams.ttf`, {
     const imageBuffer = canvas.toBuffer();
    fs.writeFileSync(pathImg, imageBuffer);
   return api.sendMessage({
-    body: `Server Information\n\nChip: ${chips}.\nProcessing Speed: ${speed}MHz.\n\nTotal Memory: ${byte2mb(os.totalmem())}.\nUsed: ${byte2mb(os.freemem())} (${(os.freemem() * 100 / os.totalmem()).toFixed()}%).\n\nBot is running up ${hours} hours ${minutes} minute ${seconds} seconds.\n\n❯ Total users: ${global.data.allUserID.length}\n❯ Total Group: ${global.data.allThreadID.length}\n❯ CPU in use: ${pidusage.cpu.toFixed(1)}%\n❯ Ram in use: ${byte2mb(pidusage.memory)}\n❯ Ping: ${Date.now() - timeStart}ms\n❯ Character ID: ${id}\n❯ Admin Faceboook:\n  https://www.facebook.com/ji.la.pi.6`,
+    body: `𝐒𝐞𝐫𝐯𝐞𝐫 𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐭𝐢𝐨𝐧\n\n𝐂𝐡𝐢𝐩: ${chips}.\n𝐏𝐫𝐨𝐜𝐞𝐬𝐬𝐢𝐧𝐠 𝐒𝐩𝐞𝐞𝐝: ${speed}MHz.\n 𝐓𝐨𝐭𝐚𝐥 𝐌𝐞𝐦𝐨𝐫𝐲: ${byte2mb(os.totalmem())}.\n𝐔𝐬𝐞𝐝: ${byte2mb(os.freemem())} (${(os.freemem() * 100 / os.totalmem()).toFixed()}%).\n\n𝐁𝐨𝐭 𝐢𝐬 𝐑𝐮𝐧𝐧𝐢𝐧𝐠 𝐔𝐩\n ${hours}  .  ${minutes} .  ${seconds}  . \n\n❯ 𝐓𝐨𝐭𝐚𝐥 𝐔𝐬𝐞𝐫𝐬: ${global.data.allUserID.length}\n❯ 𝐓𝐨𝐭𝐚𝐥 𝐆𝐫𝐨𝐮𝐩: ${global.data.allThreadID.length}\n❯ 𝐂𝐏𝐔 𝐢𝐧 𝐔𝐬𝐞: ${pidusage.cpu.toFixed(1)}%\n❯ 𝐑𝐚𝐦 𝐢𝐧 𝐔𝐬𝐞: ${byte2mb(pidusage.memory)}\n❯ 𝐏𝐢𝐧𝐠: ${Date.now() - timeStart}ms\n❯ 𝐂𝐡𝐚𝐫𝐚𝐜𝐭𝐞𝐫 𝐈𝐃: ${id}\n❯ 𝐀𝐝𝐦𝐢𝐧 𝐋𝐢𝐧𝐤:\nhttps://www.facebook.com/ji.la.pi.6`,
     attachment: fs.createReadStream(pathImg)
   },
     event.threadID,
