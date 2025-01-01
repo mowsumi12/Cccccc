@@ -88,7 +88,7 @@ var time = process.uptime(),
     const Canvas = require('canvas');
     let pathImg = __dirname + `/cache/${id}.png`;
     let pathAva = __dirname + `/cache/${event.senderID}.png`;
-    let background = (await axios.get(encodeURI(`https://imgur.com/x5JpRYu.png`), { responseType: "arraybuffer" })).data;
+    let background = (await axios.get(encodeURI(`https://i.imgur.com/JH9U6u5.jpeg`), { responseType: "arraybuffer" })).data;
     fs.writeFileSync(pathImg, Buffer.from(background, "utf-8"));
     let ava = (await axios.get(encodeURI(`${lengthchar[id].imgAnime}`), { responseType: "arraybuffer" })).data;
     fs.writeFileSync(pathAva, Buffer.from(ava, "utf-8"));
@@ -114,7 +114,7 @@ let l1 = await loadImage(pathAva);
     ctx.filter = "brightness(90%) contrast(110%)";
     ctx.font = "130px phenomicon";
     ctx.fillStyle = lengthchar[id].colorBg;
-    ctx.fillText(global.config.BOTNAME, 400, 380);
+    ctx.fillText(global.config.BOTNAME, 2200, 980);
     ctx.beginPath();
   ////////////////////////////////////////
    registerFont(__dirname + `/cache/UTM-Avo.ttf`, {
