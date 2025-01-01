@@ -18,8 +18,8 @@ module.exports.languages = {
 };
 
 module.exports.handleReaction = async ({ event, api, handleReaction, Currencies, Users}) => {
-const axios = global.nodemodule["axios"];
-const fs = global.nodemodule["fs-extra"];
+const axios = require('axios');
+const fs = require('fs-extra');
 const { threadID, messageID, userID } = event;
 if (event.userID != handleReaction.author) return;
 if (event.reaction != "🙏") return; 
