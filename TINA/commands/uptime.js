@@ -114,7 +114,7 @@ let l1 = await loadImage(pathAva);
     ctx.filter = "brightness(90%) contrast(110%)";
     ctx.font = "130px phenomicon";
     ctx.fillStyle = lengthchar[id].colorBg;
-    ctx.fillText(global.config.BOTNAME, 735, 340);
+    ctx.fillText(global.config.BOTNAME, 635, 280);
     ctx.beginPath();
   ////////////////////////////////////////
    registerFont(__dirname + `/cache/UTM-Avo.ttf`, {
@@ -132,15 +132,15 @@ registerFont(__dirname + `/cache/CaviarDreams.ttf`, {
     ctx.textAlign = "start";
     ctx.font = "55px time";
     ctx.fillText("NAZRUL", 930, 540)
-    ctx.fillText(" ISLAMICK TINA", 930, 610)
-    ctx.fillText("ISLAMICK CHAT", 930, 690)
+    ctx.fillText("nazrul404github.com", 930, 610)
+    ctx.fillText("MD NAZRUL ISLAM", 930, 690)
     ctx.restore();
     ctx.save();
     ctx.beginPath();
     const imageBuffer = canvas.toBuffer();
    fs.writeFileSync(pathImg, imageBuffer);
   return api.sendMessage({
-    body: `𝐒𝐞𝐫𝐯𝐞𝐫 𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐭𝐢𝐨𝐧\n\n𝐂𝐡𝐢𝐩: ${chips}.\n𝐏𝐫𝐨𝐜𝐞𝐬𝐬𝐢𝐧𝐠 𝐒𝐩𝐞𝐞𝐝: ${speed}MHz.\n 𝐓𝐨𝐭𝐚𝐥 𝐌𝐞𝐦𝐨𝐫𝐲: ${byte2mb(os.totalmem())}.\n𝐔𝐬𝐞𝐝: ${byte2mb(os.freemem())} (${(os.freemem() * 100 / os.totalmem()).toFixed()}%).\n\n𝐁𝐨𝐭 𝐢𝐬 𝐑𝐮𝐧𝐧𝐢𝐧𝐠 𝐔𝐩\n ${hours}  .  ${minutes} .  ${seconds}  . \n\n❯ 𝐓𝐨𝐭𝐚𝐥 𝐔𝐬𝐞𝐫𝐬: ${global.data.allUserID.length}\n❯ 𝐓𝐨𝐭𝐚𝐥 𝐆𝐫𝐨𝐮𝐩: ${global.data.allThreadID.length}\n❯ 𝐂𝐏𝐔 𝐢𝐧 𝐔𝐬𝐞: ${pidusage.cpu.toFixed(1)}%\n❯ 𝐑𝐚𝐦 𝐢𝐧 𝐔𝐬𝐞: ${byte2mb(pidusage.memory)}\n❯ 𝐏𝐢𝐧𝐠: ${Date.now() - timeStart}ms\n❯ 𝐂𝐡𝐚𝐫𝐚𝐜𝐭𝐞𝐫 𝐈𝐃: ${id}\n❯ 𝐀𝐝𝐦𝐢𝐧 𝐋𝐢𝐧𝐤:\nhttps://www.facebook.com/ji.la.pi.6`,
+    body: `𝐒𝐞𝐫𝐯𝐞𝐫 𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐭𝐢𝐨𝐧\n\n𝐂𝐡𝐢𝐩: ${chips}.\n𝐏𝐫𝐨𝐜𝐞𝐬𝐬𝐢𝐧𝐠 𝐒𝐩𝐞𝐞𝐝: ${speed}MHz.\n 𝐓𝐨𝐭𝐚𝐥 𝐌𝐞𝐦𝐨𝐫𝐲: ${byte2mb(os.totalmem())}.\n𝐔𝐬𝐞𝐝: ${byte2mb(os.freemem())} (${(os.freemem() * 100 / os.totalmem()).toFixed()}%).\n\n𝐁𝐨𝐭 𝐢𝐬 𝐑𝐮𝐧𝐧𝐢𝐧𝐠 𝐔𝐩\n      ${hours}  . ${minutes} . ${seconds}  \n\n❯ 𝐓𝐨𝐭𝐚𝐥 𝐔𝐬𝐞𝐫𝐬: ${global.data.allUserID.length}\n❯ 𝐓𝐨𝐭𝐚𝐥 𝐆𝐫𝐨𝐮𝐩: ${global.data.allThreadID.length}\n❯ 𝐂𝐏𝐔 𝐢𝐧 𝐔𝐬𝐞: ${pidusage.cpu.toFixed(1)}%\n❯ 𝐑𝐚𝐦 𝐢𝐧 𝐔𝐬𝐞: ${byte2mb(pidusage.memory)}\n❯ 𝐏𝐢𝐧𝐠: ${Date.now() - timeStart}ms\n❯ 𝐂𝐡𝐚𝐫𝐚𝐜𝐭𝐞𝐫 𝐈𝐃: ${id}\n❯ 𝐀𝐝𝐦𝐢𝐧 𝐋𝐢𝐧𝐤:\nhttps://www.facebook.com/ji.la.pi.6`,
     attachment: fs.createReadStream(pathImg)
   },
     event.threadID,
