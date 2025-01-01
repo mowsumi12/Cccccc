@@ -1,59 +1,39 @@
-const axios = require('axios');
-
 module.exports.config = {
-    name: "gemini",
-    hasPermssion: 0,
-    version: "1.0.0",
-    credits: "Jonell Magallanes",
-    description: "EDUCATIONAL",
-    usePrefix: false,
-    commandCategory: "AI",
-    usages: "[question]",
-    cooldowns: 5,
-};
-
-module.exports.handleReply = async function ({ api, event, handleReply }) {
-    const { messageID, threadID } = event;
-
-    try {
-        const lad = await api.sendMessage("🔎 Searching for an answer. Please wait...", threadID, messageID);
-        const response = await axios.get(`https://jonellccprojectapis10.adaptable.app/api/gen?ask=${encodeURIComponent(event.body)}`);
-
-        if (response.data.result) {
-            const responseMessage = `𝗚𝗲𝗺𝗶𝗻𝗶 𝗔𝗜\n━━━━━━━━━━━━━━━━━━\n${response.data.result}\n━━━━━━━━━━━━━━━━━━\n`;
-            api.editMessage(responseMessage, lad.messageID, threadID, messageID);
-        } else {
-            api.sendMessage("An error occurred while processing your request.", threadID, messageID);
-        }
-    } catch (error) {
-        console.error(error);
-        api.sendMessage("An error occurred while processing your request.", threadID, messageID);
-    }
+  name: "gemini",
+  credits: "Lorenzo",
+  description: "Talk to Gemini (conversational)",
+  hasPrefix: false,
+  commandCategory: "ai",
+  usePrefix:false,
+  hasPermission:0,
+  version: "5.6.7",
+  cooldown: 5,
+  aliases: ["gemini"],
+  usage: "gemini [ask]"
 };
 
 module.exports.run = async function ({ api, event, args }) {
-    const { messageID, threadID } = event;
-
-    if (!args[0]) return api.sendMessage("Please provide your question or request.\n\nExample: Gemini AI write a story about a young girl who discovers a magical portal in her backyard.", threadID, messageID);
-
-    try {
-        const lad = await api.sendMessage("🔎 Searching for an answer. Please wait...", threadID, messageID);
-        const response = await axios.get(`https://jonellccprojectapis10.adaptable.app/api/gen?ask=${encodeURIComponent(args.join(" "))}`);
-
-        if (response.data.result) {
-            const responseMessage = `𝗚𝗲𝗺𝗶𝗻𝗶 𝗔𝗜\n━━━━━━━━━━━━━━━━━━\n${response.data.result}\n━━━━━━━━━━━━━━━━━━\n`;
-            api.editMessage(responseMessage, lad.messageID, threadID, messageID);
-        } else {
-            api.sendMessage("An error occurred while processing your request.", threadID, messageID);
-        }
-
-        global.client.handleReply.push({
-            name: this.config.name,
-            messageID: lad.messageID,
-            author: event.senderID
-        });
-    } catch (error) {
-        console.error(error);
-        api.sendMessage("An error occurred while processing your request.", threadID, messageID);
+  const axios = require("axios");
+  let prompt = args.join(" "),
+    uid = event.senderID,
+    url;
+  if (!prompt) return api.sendMessage(`Please enter a prompt.`, event.threadID);
+  api.sendTypingIndicator(event.threadID);
+  try {
+    const geminiApi = `https://lorenzorestapi.onrender.com/api/gemini`;
+    if (event.type == "message_reply") {
+      if (event.messageReply.attachments[0]?.type == "photo") {
+        url = encodeURIComponent(event.messageReply.attachments[0].url);
+        const res = (await axios.get(`${geminiApi}?ask=${encodeURIComponent(prompt)}`)).data;
+        return api.sendMessage(res.success, event.threadID);
+      } else {
+        return api.sendMessage('Please reply to an image.', event.threadID);
+      }
     }
+    const response = (await axios.get(`${geminiApi}?ask=${encodeURIComponent(prompt)}`)).data;
+    return api.sendMessage(response.success, event.threadID);
+  } catch (error) {
+    console.error(error);
+    return api.sendMessage('❌ | An error occurred. You can try typing your query again or resending it. There might be an issue with the server that\'s causing the problem, and it might resolve on retrying.', event.threadID);
+  }
 };

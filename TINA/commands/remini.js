@@ -3,17 +3,18 @@ const fs = require('fs-extra');
 
 module.exports.config = {
   name: "remini",
-  version: "1.0.0",
-  hasPermission: 0,
-  description: "Enhanced photo",
-  commandCategory: "Image",
-  usages: "[reply to an image]",
-  usePrefix: false,
+  version: "1.0.",
+  hasPermssion: 0,
   credits: "Jonell Magallanes",
+  description: "Enhancing your photo", //api by jonell Magallanes 
+  commandCategory: "Media",
+  usePrefix: false,
+  usages: "[reply image]",
   cooldowns: 2,
 };
-module.exports.run = async function ({ api, event, args }) {
-  const pathie = './modules/commands/cache/enhanced.jpg';
+
+module.exports.run = async ({ api, event, args }) => {
+  const pathie = './cache/enhanced.jpg';
   const { threadID, messageID } = event;
 
   const james = event.messageReply.attachments[0].url || args.join(" ");
@@ -21,7 +22,7 @@ module.exports.run = async function ({ api, event, args }) {
   try {
     api.sendMessage("⏱️ | Your Photo is Enhancing. Please Wait....", threadID, messageID);
 
-    const response = await axios.get(`https://jonellccprojectapis10.adaptable.app/api/remini?imageUrl=${encodeURIComponent(james)}`);
+    const response = await axios.get(`https://jonellccapisprojectv2-a62001f39859.herokuapp.com/api/remini?imageUrl=${encodeURIComponent(james)}`);
     const processedImageURL = response.data.image_data;
 
     const imgResponse = await axios.get(processedImageURL, { responseType: "stream" });
