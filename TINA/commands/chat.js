@@ -1,5 +1,5 @@
 module.exports.config = {
-    name: "chat",
+    name: "cha5",
     version: "1.0.0",
     hasPermssion: 1,
     credits: "Jonell Magallanes",
