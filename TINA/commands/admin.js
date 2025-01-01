@@ -15,7 +15,7 @@ module.exports.config = {
 };
 
 module.exports.run = async function({ api, event, args }) {
-  const configPath = './config.json';
+  const configPath = './Nazrul.json';
 
   // Load the config file
   const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
