@@ -1,44 +1,69 @@
-const axios = require("axios");
-
 module.exports.config = {
-    name: "ai",
-    version: "1.0.0",
-    credits: "chill",
-    description: "Interact with Llama AI",
-   hasPermission: 0,
-    hasPrefix: false,
-    cooldowns: 5,
-    commandCategory: "ai",
-   usages: " si chat",
+
+name: `ai`,
+
+names: ["ai", "bot"],
+
+version: "1.1.0",
+
+hasPermssion: 0,
+
+credits: "ryuko",
+
+description: "",
+
+commandCategory: "without prefix",
+
+usage: `${global.config.BOTNAME} (question)`,
+
+cooldowns: 3,
+
+dependency: {
+
+"axios": ""
+
+}
+
 };
 
-module.exports.run = async function ({ api, event, args }) {
-    try {
-        let q = args.join(" ");
-        if (!q) {
-            return api.sendMessage("[ ❗ ] - Missing question for the ai", event.threadID, event.messageID);
-        }
+module.exports.run = async function ({api, event, args}) {
 
-        const initialMessage = await new Promise((resolve, reject) => {
-            api.sendMessage("Answering plss wait...", event.threadID, (err, info) => {
-                if (err) return reject(err);
-                resolve(info);
-            });
-        });
+try{
 
-        try {
-            const response = await axios.get(`https://joshweb.click/ai/llama-3-8b?q=${encodeURIComponent(q)}&uid=100`);
-            const answer = response.data.result;
+const axios = require('axios');
 
-            const formattedResponse = `${answer}`;
+const {sensui} = global.apiryuko
 
-            await api.editMessage(formattedResponse, initialMessage.messageID);
-        } catch (error) {
-            console.error(error);
-            await api.editMessage("An error occurred while processing your request.", initialMessage.messageID);
-        }
-    } catch (error) {
-        console.error("Error in ai2 command:", error);
-        api.sendMessage("An error occurred while processing your request.", event.threadID);
-    }
-};
+let ask = args.join(' ');
+
+if (!ask) {
+
+return api.sendMessage('please provide a question.', event.threadID, event.messageID)
+
+}
+
+var IDs = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+var randomIDs = Math.floor(Math.random() * IDs.length);
+
+const res = await axios.get(`https://geminipro-y1zu.onrender.com/chat-with-gemini?ask=${ask}&id=${randomIDs}`);
+
+const reply = res.data.response;
+
+if (res.error) {
+
+return api.sendMessage('having some unexpected error while fetching api.', event.threadID, event.messageID)
+
+} else {
+
+return api.sendMessage(`${reply}`, event.threadID, event.messageID)
+
+}
+
+} catch (error) {
+
+return api.sendMessage('having some unexpected error', event.threadID, event.messageID)
+
+}
+
+}
