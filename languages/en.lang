@@ -100,7 +100,7 @@ handleCommand.userBanned=একটি এডমিন আপনাকে বট 
 
 handleCommand.threadBanned=একটি এডমিন এই গ্রুপ এ বট বন্ধ করে দিয়েছে।  আবার চালু করতে এডমিনকে এ্যাড বা মেসেজ দেন https://m.me/ji.la.pi.6
 
-handleCommand.commandNotExist=the command  " %3 "  you used doesn't exist in our system, try "%1".  or %2help to see all available commands
+handleCommand.commandNotExist=the command  %2  you used doesn't exist in our system, try "%1"  or %2help to see all available commands
 
 handleCommand.commandThreadBanned=Your thread is unable to use command "%1"
 
