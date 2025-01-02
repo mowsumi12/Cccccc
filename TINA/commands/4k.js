@@ -1,69 +1,60 @@
-const imgur = require("imgur");
-const fs = require("fs");
-const axios = require("axios");
-const moment = require("moment-timezone");
-const { downloadFile } = require("../../utils/index");
+  exports.config = {
+name: '4k',
+version: '0.0.1',
+hasPermssion: 0,
+credits: 'DC-Nam',
+description: 'Tăng chất lượng ảnh lên 4k',
+usePrefix: false,
+commandCategory: 'Ảnh',
+usages: '[image]',
+cooldowns: 3
 
-module.exports.config = {
- name: "4k",
- version: "1.0.0",
- hasPermssion: 0,
- credits: "DongDev",
- description: "Tăng độ phân giải hình ảnh lên 4K",
- commandCategory: "Tiện ích",
- usages: "[reply]",
- cooldowns: 0,
- images: [
- "https://files.catbox.moe/cbkjr1.jpeg",
- "https://files.catbox.moe/5dmlyd.jpeg"
- ],
 };
 
-module.exports.run = async ({ api, event, Users }) => {
- const { threadID, type, messageReply, messageID } = event;
- let name = await Users.getNameUser(event.senderID);
- 
- const ClientID = "771631e18e73452";
- const upscaleAPI = "http://server.gamehosting.vn:25755/taoanhdep/lamnetanh";
+let eta = 3;
 
- if (type !== "message_reply") {
- return api.sendMessage("⚠️ Bạn phải reply một hình ảnh nào đó", threadID, messageID);
- }
+exports.run = async o=> {
 
- if (messageReply.attachments.length !== 1) {
- return api.sendMessage("⚠️ Bạn chỉ có thể xử lý mỗi hình ảnh một lần", threadID, messageID);
- }
+  let send = msg => o.api.sendMessage(msg, o.event.threadID, o.event.messageID);
 
- imgur.setClientId(ClientID);
 
- const startTime = Date.now();
- const initialMessage = `⏱️ | Tiến hành tăng độ phân giải, vui lòng chờ...`;
- api.sendMessage(initialMessage, threadID, messageID);
+  if (o.event.type != 'message_reply')return send(`Please reply 1 photo !
 
- const attachment = messageReply.attachments[0];
- const pathSave = __dirname + `/cache/${startTime}.jpg`;
- const url = attachment.url;
- let processingTime = 0;
+`);
 
- await downloadFile(url, pathSave);
+  send(`Increase the resolution for ${o.event.messageReply.attachments.length} image (${o.event.messageReply.attachments.length*eta}s)`);
 
- const uploadStartTime = Date.now();
- const uploadPromise = imgur.uploadFile(pathSave);
- const getLink = await uploadPromise;
- const uploadEndTime = Date.now();
 
- fs.unlinkSync(pathSave);
+  let stream = [];
 
- processingTime = ((uploadEndTime - startTime) / 1000).toFixed(2);
+  let exec_time = 0;
 
- const upscaleRes = (await axios({ url: (await axios(`${upscaleAPI}?url=${getLink.link}`)).data.data,
- method: "GET",
- responseType: "stream" })).data;
+  for (let i of o.event.messageReply.attachments)try {
 
- processingTime = parseFloat(processingTime).toFixed(2);
+    let res = await require('axios').get(encodeURI(`https://nams.live/upscale.png?{"image":"${i.url}","model":"4x-UltraSharp"}`), {
 
- api.sendMessage({ 
- body: `✅ Xử lý ảnh thành công\n👤 Người yêu cầu: ${name}\n⌛ Thời gian xử lý: ${processingTime} giây\n───────────────────\n⏰ Time: ${moment.tz("Asia/Ho_Chi_Minh").format("HH:mm:ss || DD/MM/YYYY")}`, 
- attachment: upscaleRes 
- }, threadID);
+      responseType: 'stream',
+
+    });
+
+
+    exec_time+=+res.headers.exec_time;
+
+    eta = res.headers.exec_time/1000<<0;
+
+    res.data.path = 'tmp.png';
+
+    stream.push(res.data);
+
+  } catch (e) {};
+
+
+  send({
+
+    body: `Successful (${exec_time/1000<<0}s)`,
+
+    attachment: stream,
+
+  });
+
 };

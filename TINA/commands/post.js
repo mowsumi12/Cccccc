@@ -4,6 +4,7 @@ module.exports.config = {
 	hasPermssion: 2,
 	credits: "NTKhang",
 	description: "Create a new post in acc bot",
+  usePrefix: true,
 	commandCategory: "Tiện ích",
 	cooldowns: 5
 };
@@ -269,4 +270,4 @@ function getGUID() {
     return _guid;
   });
   return id;
-				       }
+                                   }
