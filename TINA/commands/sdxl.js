@@ -5,11 +5,12 @@ const path = require("path");
 module.exports.config = {
     name: "sdxl",
     version: "1.0.0",
+    hasPermssion: 0,
     credits: "chill",
     description: "Generate images",
-    hasPrefix: false,
-    cooldown: 5,
-    aliases: ["sdxl"]
+    commandCategory: "user",
+    cooldowns: 5,
+    usages: "sdxl"
 };
 
 const styleList = {
