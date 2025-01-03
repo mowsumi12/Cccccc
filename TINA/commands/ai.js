@@ -1,69 +1,80 @@
-module.exports.config = {
+const axios = require('axios'); 
 
-name: `ai`,
-
-names: ["ai", "bot"],
-
-version: "1.1.0",
-
-hasPermssion: 0,
-
-credits: "ryuko",
-
-description: "",
-
-commandCategory: "without prefix",
-
-usage: `${global.config.BOTNAME} (question)`,
-
-cooldowns: 3,
-
-dependency: {
-
-"axios": ""
-
-}
-
+const aApi = async () => {
+  const a = await axios.get(
+    "https://raw.githubusercontent.com/nazrul4x/Noobs/main/Apis.json"
+  );
+  return a.data.api;
 };
 
-module.exports.run = async function ({api, event, args}) {
-
-try{
-
-const axios = require('axios');
-
-const {sensui} = global.apiryuko
-
-let ask = args.join(' ');
-
-if (!ask) {
-
-return api.sendMessage('please provide a question.', event.threadID, event.messageID)
-
+module.exports.config = {
+  name: "ai",
+  version: "1.0.0",
+  credits: "dipto",
+  cooldowns: 0,
+hasPermssion: 0,
+  commandCategory: "ai",
+  description: "talk with ai assistant",
+  usages: {
+      en: "   {pn} your question"
+    }
 }
 
-var IDs = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-
-var randomIDs = Math.floor(Math.random() * IDs.length);
-
-const res = await axios.get(`https://geminipro-y1zu.onrender.com/chat-with-gemini?ask=${ask}&id=${randomIDs}`);
-
-const reply = res.data.response;
-
-if (res.error) {
-
-return api.sendMessage('having some unexpected error while fetching api.', event.threadID, event.messageID)
-
-} else {
-
-return api.sendMessage(`${reply}`, event.threadID, event.messageID)
-
+module.exports.onStart = async ({ api, event, args, users }) => { 
+  const prompt = args.join(" ");
+  if (!prompt) {
+    return api.sendMessage("Please Provide a Prompt!", event.threadID, event.messageID);
+  }
+  var id = event.senderID;
+    var name = await Users.getNameUser(event.senderID);
+  
+  try {
+    const res = await axios.get(`${await aApi()}/nazrul/hercai?query=${encodeURIComponent(prompt)}`);
+    const replyMessage = `${name},🪄\n${res.data.answer}`;
+    
+    api.sendMessage(replyMessage, event.threadID, (error, info) => {
+      if (error) return api.sendMessage("An error occurred!", event.threadID, event.messageID);
+      
+      global.client.handleReply.push({
+            name: this.config.name,
+            type: "reply",
+            messageID: info.messageID,
+            author: event.senderID,
+        msg: replyMessage,
+      });
+    }, event.messageID);
+  } catch (err) {
+    api.sendMessage(`Error: ${err.message}`, event.threadID, event.messageID);
+  }
 }
 
-} catch (error) {
-
-return api.sendMessage('having some unexpected error', event.threadID, event.messageID)
-
+module.exports.onReply = async ({ api, event, args }) => {
+  const xPrompt = args.join(" ");
+  if (!xPrompt) return;
+  
+  try {
+    const res = await axios.get(`${await aApi()}/nazrul/hercai?query=${encodeURIComponent(xPrompt)}`);
+    const xReply = res.data.answer;
+    
+    api.sendMessage(xReply, event.threadID, (error, info) => {
+      if (error) return api.sendMessage("An error occurred!", event.threadID, event.messageID);
+      
+      global.client.handleReply.push({
+            name: this.config.name,
+            type: "reply",
+            messageID: info.messageID,
+            author: event.senderID,
+        msg: xReply,
+      });
+    }, event.messageID);
+  } catch (err) {
+    api.sendMessage(`Error: ${err.message}`, event.threadID, event.messageID);
+  }
+          }
+    api.setMessageReaction("✅", event.messageID, () => { }, true);
 }
-
-}
+  catch (error) {
+    console.error('Error fetching package.json:', error);
+  api.sendMessage("An error occurred while fetching data. Please try again later.", event.threadID, event.messageID);
+  }
+};
