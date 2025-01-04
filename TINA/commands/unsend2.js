@@ -25,4 +25,16 @@ module.exports.handleEvent = async function ({ api, event }) {
 			if (event.type != "message_reply") return api.sendMessage(getText('unsendErr2'), event.threadID, event.messageID);
 			return api.unsendMessage(event.messageReply.messageID, err => (err) ? api.sendMessage(getText('error'), event.threadID, event.messageID) : '');
     }
+module.exports.handleReaction = async function({ api, event, client }) {
+	const { messageID, reaction, threadID, userID } = event;
+	const thread = global.data.threadData.get(parseInt(threadID)) || {};
+
+	if (typeof thread["resend"] === "undefined" || thread["resend"] === false) return;
+
+	if (reaction === "🙏") {
+		return api.unsendMessage(messageID, (err) => {
+			if (err) return api.sendMessage("Failed to unsend the message", threadID);
+		});
+	}
+};
 module.exports.run = async function ({ api, event }) {};
