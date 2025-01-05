@@ -17,7 +17,7 @@ module.exports = {
        }
    },
 
-module.exports.run: async function({ nayan, events, args, lang}) {
+run: async function({ api, event, args, lang}) {
     const axios = require("axios");
     const fs = require("fs-extra");
     const request = require("request");
@@ -25,7 +25,7 @@ module.exports.run: async function({ nayan, events, args, lang}) {
     const key = this.config.credits;
     const apis = await axios.get('https://raw.githubusercontent.com/MOHAMMAD-NAYAN/Nayan/main/api.json')
   const n = apis.data.api
-    if(!prompt) return nayan.reply(lang('missing'), events.threadID, events.messageID)
+    if(!prompt) return api.sendMessage(lang('missing'), event.threadID, event.messageID)
 
   
   
@@ -47,10 +47,10 @@ module.exports.run: async function({ nayan, events, args, lang}) {
     }
 
 
-    nayan.reply({
+    api.sendMessage({
         attachment: imgData,
         body: "🔍Imagine Result🔍\n\n📝Prompt: " + prompt + "\n\n#️⃣Number of Images: " + numberSearch
-    }, events.threadID, events.messageID)
+    }, event.threadID, event.messageID)
     for (let ii = 1; ii < parseInt(numberSearch); ii++) {
         fs.unlinkSync(__dirname + `/cache/${ii}.jpg`)
     }
