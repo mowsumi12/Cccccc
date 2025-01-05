@@ -1,59 +1,39 @@
-module.exports = {
-  config: {
-    name: "imagine",
-    version: "1.0.0",
-    hasPermssion: 0,
-    credits: "Nayan",
-    usePrefix: true,
-    description: "",
-    commandCategory: "prefix",
-    usages: "prompt",
-    cooldowns: 10,
-},
+const axios = require("axios");
 
-   languages: {
-   "vi": {},
-       "en": {
-           "missing": 'use : /imagine cat'
-       }
-   },
+const baseApiUrl = async () => {
+  const base = await axios.get(
+    `https://raw.githubusercontent.com/MOHAMMAD-NAYAN/Nayan/main/api.json`
+  );
+  return base.data.api;
+};
 
-start: async function({ api, events, args, lang}) {
-    const axios = require("axios");
-    const fs = require("fs-extra");
-    const request = require("request");
-    const prompt = args.join(" ");
-    const key = this.config.credits;
-    const apis = await axios.get('https://raw.githubusercontent.com/MOHAMMAD-NAYAN/Nayan/main/api.json')
-  const n = apis.data.api
-    if(!prompt) return api.sendMessage(lang('missing'), events.threadID, events.messageID)
-
-  
-  
-
-
-    const res = await axios.get(`${n}/nayan/img?prompt=${encodeURIComponent(prompt)}`);
-
-
-  console.log(res.data)
-    const data = res.data.imageUrls;
-  const numberSearch = data.length
-    var num = 0;
-    var imgData = [];
-    for (var i = 0; i < parseInt(numberSearch); i++) {
-      let path = __dirname + `/cache/${num+=1}.jpg`;
-      let getDown = (await axios.get(`${data[i]}`, { responseType: 'arraybuffer' })).data;
-      fs.writeFileSync(path, Buffer.from(getDown, 'utf-8'));
-      imgData.push(fs.createReadStream(__dirname + `/cache/${num}.jpg`));
-    }
-
-
-    api.sendMessage({
-        attachment: imgData,
-        body: "🔍Imagine Result🔍\n\n📝Prompt: " + prompt + "\n\n#️⃣Number of Images: " + numberSearch
-    }, events.threadID, events.messageID)
-    for (let ii = 1; ii < parseInt(numberSearch); ii++) {
-        fs.unlinkSync(__dirname + `/cache/${ii}.jpg`)
-    }
-}
+ module.exports.config = {
+   name: "imagedata",
+   version: "1.6.9",
+   credits: "Nazrul",
+   cooldowns: 5,
+   hasPermission: 0,
+   usePrefix: true,
+   prefix: true,
+   description: "Get data from Images",
+   commandCategory: "image",
+   usage: "{pn} reply to an image"
+ };
+ module.exports.run = async ({ api, event, args }) => {
+   try {
+     const img = event.messageReply?.attachments[0]?.url;
+     if (!img) {
+       return api.sendMessage("😡 Please reply to an image!", event.threadID, event.messageID);
+     }
+     const { data } = await axios.get(`${await baseApiUrl()}/nayan/img?prompt=${encodeURIComponent(prompt)};
+     if (!data || data.error) {
+       return api.sendMessage("🐸 error while fetching image data!", event.threadID, event.messageID);
  }
+  const imgD = {
+    body: `✅ Here's your image data✨\n\n♡ Format: ${data.format}\n♡ Width: ${data.width}px\n♡ Height: ${data.height}px\n♡ File Size: ${data.fileSizeInKB} KB (${data.fileSizeInMB} MB)\n♡ Color Space: ${data.colorSpace}\n♡ Channels: ${data.channels}\n♡ Bit Depth: ${data.bitDepth}\n♡ Is Progressive: ${data.isProgressive}\n♡ Has Alpha: ${data.hasAlpha}\n♡ Density: ${data.density} DPI\n`
+ };
+  return api.sendMessage(imgD, event.threadID, event.messageID);
+   } catch (error) {
+     api.sendMessage("Error: " + error.message, event.threadID, event.messageID);
+   }
+ };
