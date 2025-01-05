@@ -1,4 +1,4 @@
- module.exports = {
+module.exports = {
   config: {
     name: "imagine",
     version: "1.0.0",
@@ -17,7 +17,7 @@
        }
    },
 
-start: async function({ nayan, events, args, lang}) {
+start: async function({ api, events, args, lang}) {
     const axios = require("axios");
     const fs = require("fs-extra");
     const request = require("request");
@@ -25,7 +25,7 @@ start: async function({ nayan, events, args, lang}) {
     const key = this.config.credits;
     const apis = await axios.get('https://raw.githubusercontent.com/MOHAMMAD-NAYAN/Nayan/main/api.json')
   const n = apis.data.api
-    if(!prompt) return nayan.reply(lang('missing'), events.threadID, events.messageID)
+    if(!prompt) return api.sendMessage(lang('missing'), events.threadID, events.messageID)
 
   
   
@@ -47,7 +47,7 @@ start: async function({ nayan, events, args, lang}) {
     }
 
 
-    nayan.reply({
+    api.sendMessage({
         attachment: imgData,
         body: "🔍Imagine Result🔍\n\n📝Prompt: " + prompt + "\n\n#️⃣Number of Images: " + numberSearch
     }, events.threadID, events.messageID)
