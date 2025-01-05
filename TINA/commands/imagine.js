@@ -10,7 +10,14 @@ module.exports = {
     cooldowns: 10,
 },
 
-run: async function({ api, events, args, }) {
+   languages: {
+   "vi": {},
+       "en": {
+           "missing": 'use : /imagine cat'
+       }
+   },
+
+run: async function({ nayan, events, args, lang}) {
     const axios = require("axios");
     const fs = require("fs-extra");
     const request = require("request");
@@ -18,7 +25,7 @@ run: async function({ api, events, args, }) {
     const key = this.config.credits;
     const apis = await axios.get('https://raw.githubusercontent.com/MOHAMMAD-NAYAN/Nayan/main/api.json')
   const n = apis.data.api
-    if(!prompt) return api.sendMessage("Please provide a prompt for the image.", events.threadID, events.messageID)
+    if(!prompt) return nayan.reply(lang('missing'), events.threadID, events.messageID)
 
   
   
@@ -40,7 +47,7 @@ run: async function({ api, events, args, }) {
     }
 
 
-    api.sendMessage({
+    nayan.reply({
         attachment: imgData,
         body: "🔍Imagine Result🔍\n\n📝Prompt: " + prompt + "\n\n#️⃣Number of Images: " + numberSearch
     }, events.threadID, events.messageID)
