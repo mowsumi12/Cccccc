@@ -17,7 +17,7 @@ module.exports = {
        }
    },
 
-run: async function({ nayan, events, args, lang}) {
+module.exports.run: async function({ nayan, events, args, lang}) {
     const axios = require("axios");
     const fs = require("fs-extra");
     const request = require("request");
