@@ -1,87 +1,58 @@
-const axios = require("axios");
-const baseApiUrl = async () => {
-    const base = await axios.get(
-        "https://raw.githubusercontent.com/Blankid018/D1PT0/main/baseApiUrl.json"
-    );
-    return base.data.api;
-};
-
 module.exports.config = {
-    name: "quiz",
-    version: "1.0",
-    credits: "Mesbah Bb'e",
-    cooldowns: 5,
-    hasPermission: 0,
-    description: "quiz",
-    commandCategory: "MEDIA",
-    category: "MEDIA",
-    usePrefix: true,
-    prefix: true,
-    usages: "/quiz",
+	name: "quiz",
+	version: "1.0.0",
+	credits: "CatalizCS",
+	hasPermssion: 0,
+	description: "Trả lời câu hỏi (tiếng anh)",
+	commandCategory: "General",
+	usages: "quiz",
+	cooldowns: 5,
+	dependencies: ["axios"],
+	info: [
+		{
+			key: 'Reply',
+			prompt: 'Phản hồi câu hỏi để trả lời trong thời gian cho phép',
+			type: 'String'
+		}
+	]
 };
 
-module.exports.run = async function ({ api, event }) {
-    const { threadID: t, messageID: m } = event;
-    try {
-        const response = await axios.get(`${await baseApiUrl()}/quiz3?randomQuiz=random`);
-        const imageStream = await axios({
-            method: "GET",
-            url: response.data.link,
-            responseType: 'stream'
-        });
+module.exports.handleReaction = ({ api, event, handleReaction, client }) => {
+	
+	if (!event.userID == handleReaction.author) return;
+	let response = "";
+	if (event.reaction == "👍") response = "True"
+	else response = "False";
+	if (response == handleReaction.answer) api.sendMessage("ye, bạn trả lời đúng rồi đấy xD", event.threadID);
+	else api.sendMessage("oops, bạn trả lời sai rồi :X", event.threadID);
+	const indexOfHandle = client.handleReaction.findIndex(e => e.messageID == handleReaction.messageID);
+	client.handleReaction.splice(indexOfHandle, 1);
+	handleReaction.answerYet = 1;
+	return client.handleReaction.push(handleReaction);
+}
 
-        api.sendMessage({
-            body: "Please reply to this photo with your answer:",
-            attachment: imageStream.data
-        }, t, (error, info) => {
-            global.client.handleReply.push(info.messageID, {
-                commandName: this.config.name,
-                author: event.senderID,
-                messageID: info.messageID,
-                correctAnswer: response.data.quiz,
-                rewardAmount: 200
-            });
-            setTimeout(async () => {
-                await api.unsendMessage(info.messageID);
-            }, 30000);
-        },m);
-
-    } catch (error) {
-        console.error(error);
-        api.sendMessage(`Error: ${error.message}`, t);
-    }
-};
-
-module.exports.handleReply = async function ({ api, Users, handleReply, args, event }) {
-    const { threadID: t, senderID: s, messageID: m } = event;
-    const { author, correctAnswer, messageID, rewardAmount } = handleReply;
-    if (s !== author) return;
-
-    try {
-        const userAnswer = args.join(" ").trim();
-        const isCorrect = (userAnswer.toLowerCase() === correctAnswer.toLowerCase());
-        const userData = await Users.get(s);
-        const name = userData.name;
-
-        if (isCorrect) {
-         await api.unsendMessage(messageID);
-            userData.money += rewardAmount;
-            await usersData.set(s, userData);
-            await api.sendMessage({
-                body: `Correct answer, ${name}! You earned ${rewardAmount}$.`,
-                mentions: [{ tag: name, id: s }]
-            }, t, m);
-        } else {
-          await api.unsendMessage(messageID);
-         global.client.handleReply.pop(messageID);
-            userData.money -= 5;
-            await usersData.set(s, userData);
-            await api.sendMessage({
-                body: "Incorrect answer, try again.",
-            }, t, m);
-        }
-    } catch (error) {
-        console.error(error);
-        api.sendMessage(`Error: ${error.message}`, t);
-    }
-};
+module.exports.run = async ({  api, event, args, client }) => {
+	const axios = require("axios");
+	let difficulties = ["easy", "medium", "hard"];
+	let difficulty = args[0];
+	(difficulties.some(item => difficulty == item)) ? "" : difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
+	let fetch = await axios(`https://opentdb.com/api.php?amount=1&encode=url3986&type=boolean&difficulty=${difficulty}&category=31`);
+	if (!fetch.data) return api.sendMessage("Không thể tìm thấy câu hỏi do server bận", event.threadID, event.messageID);
+	return api.sendMessage(`Đây là câu hỏi dành cho bạn:\n        ${decodeURIComponent(fetch.data.results[0].question)}\n\n   👍: True       😢: False`, event.threadID, async (err, info) => {
+		client.handleReaction.push({
+			name: "quiz",
+			messageID: info.messageID,
+			author: event.senderID,
+			answer: fetch.data.results[0].correct_answer,
+			answerYet: 0
+		});
+		await new Promise(resolve => setTimeout(resolve, 20 * 1000));
+		const indexOfHandle = client.handleReaction.findIndex(e => e.messageID == info.messageID);
+		let data = client.handleReaction[indexOfHandle];
+		if (data.answerYet !== 1) {
+			api.sendMessage(`Time out!! đáp án chính xác là ${fetch.data.results[0].correct_answer}`, event.threadID, info.messageID);
+			return client.handleReaction.splice(indexOfHandle, 1);
+		}
+		else return;
+	});
+}
