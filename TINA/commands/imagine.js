@@ -4,6 +4,7 @@ module.exports = {
     version: "1.0.0",
     hasPermssion: 0,
     credits: "Nayan",
+    usePrefix: true,
     description: "",
     commandCategory: "prefix",
     usages: "prompt",
