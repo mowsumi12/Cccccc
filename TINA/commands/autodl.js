@@ -1,5 +1,5 @@
 const configCommand = {
-	name: 'autodl',
+	name: 'autodl2',
 	version: '1.1.1',
 	hasPermssion: 2,
 	credits: 'AYAN CHOWDHURY',
