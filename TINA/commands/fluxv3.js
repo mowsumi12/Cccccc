@@ -8,7 +8,7 @@ const models = [
 module.exports.config = {
   name: "fluxv3",
   version: "1.0.0",
-  permission: 0,
+  hasPermssion: 0,
   credits: "no",
   usePrefix: true,
   commandCategory: "no",
