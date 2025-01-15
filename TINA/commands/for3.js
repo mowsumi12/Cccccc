@@ -3,15 +3,14 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports.config = {
-    name: "ff3",
+    name: "for",
     description: "Generate image from fal ai flux pro",
-    cooldown: 5,
     commandCategory: "",
     hasPermssion: 0,
     hasPrefix: false,
     cooldowns: 5,
     credits: "nazrul", //api by samir
-    usage: "{p}{n} <prompt>",
+    usages: "{p}{n} <prompt>",
 };
 
 module.exports.run = async function ({ api, event, args }) {
